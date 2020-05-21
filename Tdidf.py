@@ -7,8 +7,7 @@ Created on Tue May 19 11:42:08 2020
 
 
 from nltk.tokenize import word_tokenize
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+
 import numpy as np
 import string
 import pandas as pd
@@ -80,18 +79,24 @@ print(docTfIdfDf)
 
 ## Use TfidfVectorizer to perfom the same
 
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
 vectorizer = TfidfVectorizer(analyzer='word',norm=None, use_idf=True,smooth_idf=True)
 tfIdfMat  = vectorizer.fit_transform(docs)
 
 feature_names = sorted(vectorizer.get_feature_names())
 
-
-skDocsTfIdfdf = pd.DataFrame(tfIdfMat.todense(),  columns=feature_names)
+docList=['Doc 1','Doc 2','Doc 3','Doc 4']
+skDocsTfIdfdf = pd.DataFrame(tfIdfMat.todense(),index=sorted(docList),  columns=feature_names)
 print(skDocsTfIdfdf)
 
 
-#remove stopwords
+#compute cosine similarity
 csim = cosine_similarity(tfIdfMat,tfIdfMat)
+
+csimDf = pd.DataFrame(csim,index=sorted(docList),columns=sorted(docList))
 
 
 
